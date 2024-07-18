@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MMR Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            text-align: center;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        input[type="number"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .nouislider {
+            margin: 20px 0;
+        }
+
+        .button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007BFF;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .price {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .mmr-label {
+            margin-bottom: 5px;
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="mmr-box">
+            <div class="mmr-label">Current MMR</div>
+            <input type="number" id="currentMMR" placeholder="Enter current MMR" oninput="updateSliderFromBox()">
+        </div>
+        <div class="mmr-box">
+            <div class="mmr-label">Desired MMR</div>
+            <input type="number" id="desiredMMR" placeholder="Enter desired MMR" oninput="updateSliderFromBox()">
+        </div>
+        <div id="mmrSlider" class="nouislider"></div>
+        <div class="slider-labels">
+            <span>0</span>
+            <span>8000</span>
+        </div>
+        <div class="price" id="price">Price: $0</div>
+        <button class="button" onclick="addToCart()">Add to Cart</button>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.js"></script>
+    <script>
+        const pricePerMMR = 1; // Price per MMR point, adjust as needed
+
+        const currentMMRInput = document.getElementById('currentMMR');
+        const desiredMMRInput = document.getElementById('desiredMMR');
+        const priceDisplay = document.getElementById('price');
+
+        const slider = document.getElementById('mmrSlider');
+
+        noUiSlider.create(slider, {
+            start: [0, 4000],
+            connect: true,
+            range: {
+                'min': 0,
+                'max': 8000
+            },
+            tooltips: [true, true],
+            format: {
+                to: function (value) {
+                    return Math.round(value);
+                },
+                from: function (value) {
+                    return Math.round(value);
+                }
+            }
+        });
+
+        slider.noUiSlider.on('update', function (values, handle) {
+            if (handle === 0) {
+                currentMMRInput.value = Math.round(values[0]);
+            } else {
+                desiredMMRInput.value = Math.round(values[1]);
+            }
+            updatePrice();
+        });
+
+        function updateSliderFromBox() {
+            const currentMMR = parseInt(currentMMRInput.value) || 0;
+            const desiredMMR = parseInt(desiredMMRInput.value) || 0;
+            slider.noUiSlider.set([currentMMR, desiredMMR]);
+        }
+
+        function updatePrice() {
+            const currentMMR = parseInt(currentMMRInput.value) || 0;
+            const desiredMMR = parseInt(desiredMMRInput.value) || 0;
+            const price = Math.abs(desiredMMR - currentMMR) * pricePerMMR;
+            priceDisplay.textContent = Price: $${price};
+        }
+
+        function addToCart() {
+            alert('Item added to cart');
+        }
+    </script>
+</body>
+</html>
